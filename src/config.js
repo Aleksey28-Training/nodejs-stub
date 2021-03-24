@@ -1,14 +1,20 @@
-const { PORT = 1337, HOST = 'localhost' } = process.env;
+import { config } from 'dotenv';
 
-const config = {
+config();
+
+const { PORT = '1337', HOST = 'localhost' } = process.env;
+
+console.log(PORT);
+
+const myConfig = {
     PORT,
     HOST
 };
 
-export default config;
+export default myConfig;
 
 export {
     PORT,
     HOST,
-    config
+    myConfig as config,
 };

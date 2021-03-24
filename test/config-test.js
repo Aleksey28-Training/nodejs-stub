@@ -10,7 +10,7 @@ describe('Checking "HOST"', () => {
 
 describe('Checking "PORT"', () => {
     it('"PORT" equals "1337"', () => {
-        expect(PORT, 'PORT doesn\'t equal 1337').to.equal(1337);
+        expect(PORT, 'PORT doesn\'t equal 1337').to.equal('1337');
     });
 });
 
@@ -28,7 +28,7 @@ describe('Checking "config"', () => {
         expect(config, 'config must have property PORT').to.have.property('PORT');
     });
     it('config\'s property PORT equals localhost', () => {
-        expect(config['PORT'], 'config\'s property PORT doesn\'t equal localhost').to.equal(1337);
+        expect(config['PORT'], 'config\'s property PORT doesn\'t equal localhost').to.equal('1337');
     });
 });
 
@@ -46,6 +46,6 @@ describe('Checking "defaultConfig"', () => {
         expect(defaultConfig, '"defaultConfig" must have property "PORT"').to.have.property('PORT');
     });
     it('"defaultConfig"\'s property PORT equals localhost', () => {
-        expect(defaultConfig['PORT'], 'config\'s property "PORT" doesn\'t equal localhost').to.equal(1337);
+        expect(defaultConfig['PORT'], 'config\'s property "PORT" doesn\'t equal localhost').to.equal('1337');
     });
 });
