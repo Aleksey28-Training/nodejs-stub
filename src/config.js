@@ -7,7 +7,7 @@ const debugConfig = debug('config');
 
 const { PORT = '1337', HOST = 'localhost' } = process.env;
 
-//You need to tap $env:DEBUG="config" in terminal to turn on debug
+//HACK: You need to tap $env:DEBUG="config" in terminal to turn on debug
 debugConfig(`PORT: ${PORT}`);
 debugConfig(`HOST: ${HOST}`);
 
