@@ -1,8 +1,8 @@
-import { config } from 'dotenv';
+import { config as envConfig } from 'dotenv';
 import debug from 'debug';
 import { name } from '../package.json';
 
-config();
+envConfig();
 
 const { PORT = '1337', HOST = 'localhost' } = process.env;
 
@@ -18,15 +18,15 @@ debugApp('booting %o', name);
 debugConfig(`PORT: ${PORT}`);
 debugConfig(`HOST: ${HOST}`);
 
-const myConfig = {
+const config = {
     PORT,
     HOST
 };
 
-export default myConfig;
+export default config;
 
 export {
     PORT,
     HOST,
-    myConfig as config,
+    config,
 };
