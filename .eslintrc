@@ -23,6 +23,7 @@
         "after": true
       }
     ],
+    "no-console":  "error",
     "prefer-arrow-callback": 2,
     "no-alert": 2,
     "no-array-constructor": 2,

@@ -1,9 +1,13 @@
-import { config } from 'dotenv';
+import { config as envConfig } from 'dotenv';
 import debug from 'debug';
 
-config();
+envConfig();
 
-const debugConfig = debug('config');
+const DEBUG_PREFIX_APP    = 'app';
+const DEBUG_PREFIX_CONFIG = 'config';
+
+const debugApp    = debug(DEBUG_PREFIX_APP);
+const debugConfig = debug(DEBUG_PREFIX_CONFIG);
 
 class Config {
     constructor (port = '', host = '') {
@@ -11,7 +15,7 @@ class Config {
         this._host = host;
     }
 
-    static get port () {
+    get port () {
         const { port = '1337' } = process.env;
 
         //You need to tap $env:DEBUG="config" in terminal to turn on debug
@@ -19,7 +23,8 @@ class Config {
 
         return this._port || port;
     }
-    static get host () {
+
+    get host () {
         const { host = 'localhost' } = process.env;
 
         //You need to tap $env:DEBUG="config" in terminal to turn on debug
@@ -29,21 +34,23 @@ class Config {
     }
 }
 
-// const { PORT = '1337', HOST = 'localhost' } = process.env;
-const PORT = Config.port;
-const HOST = Config.host;
+const config = new Config();
+const PORT = config.port;
+const HOST = config.host;
 
-const myConfig = {
+export default {
     PORT,
     HOST,
-    Config
+    debugApp,
+    debugConfig,
+    Config,
 };
-
-export default myConfig;
 
 export {
     PORT,
     HOST,
-    myConfig as config,
+    debugApp,
+    debugConfig,
     Config,
 };
+
