@@ -22,7 +22,6 @@ async function run () {
     if (esMain(import.meta)) {
         await server.start().then(() => {
             debugApp('%o is listening', packageJSON.name);
-            console.log(`Example app listening at http://${config.host}:${config.port}`);
         });
     }
 
