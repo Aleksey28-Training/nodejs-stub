@@ -22,6 +22,13 @@ class Server {
 
         return listenPromise;
     }
+    async stop () {
+        const closePromise = once(this._server, 'close');
+
+        this._server.close();
+
+        return closePromise;
+    }
 }
 
 export default Server;
