@@ -1,19 +1,12 @@
 import { config as envConfig } from 'dotenv';
-import { readFileSync } from 'fs';
 import debug from 'debug';
 
 envConfig();
 
-const packageJSON = JSON.parse(readFileSync('./package.json', 'utf8'));
-
 const DEBUG_PREFIX_APP    = 'app';
 const DEBUG_PREFIX_CONFIG = 'config';
 
-const debugApp    = debug(DEBUG_PREFIX_APP);
 const debugConfig = debug(DEBUG_PREFIX_CONFIG);
-
-//NOTE: You need to tap $env:DEBUG="config" in terminal to turn on debug
-debugApp('%o booting', packageJSON.name);
 
 class Config {
     constructor (port = '', host = '') {
@@ -21,7 +14,7 @@ class Config {
         this._host = host;
     }
 
-    static get port () {
+    get port () {
         const { port = '1337' } = process.env;
 
         //You need to tap $env:DEBUG="config" in terminal to turn on debug
@@ -30,7 +23,7 @@ class Config {
         return this._port || port;
     }
 
-    static get host () {
+    get host () {
         const { host = 'localhost' } = process.env;
 
         //You need to tap $env:DEBUG="config" in terminal to turn on debug
@@ -40,19 +33,21 @@ class Config {
     }
 }
 
-// const { PORT = '1337', HOST = 'localhost' } = process.env;
-const PORT = Config.port;
-const HOST = Config.host;
+const config = new Config();
+const PORT = config.port;
+const HOST = config.host;
 
 export default {
     PORT,
     HOST,
+    DEBUG_PREFIX_APP,
     Config,
 };
 
 export {
     PORT,
     HOST,
+    DEBUG_PREFIX_APP,
     Config,
 };
 
