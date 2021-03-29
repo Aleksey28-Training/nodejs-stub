@@ -1,4 +1,4 @@
-import defaultConfig, { config, HOST, PORT } from '../src/config.js';
+import defaultConfig, { default as config, HOST, PORT } from '../src/config.js';
 import server from '../index.js';
 import { expect } from 'chai';
 import got from 'got';
