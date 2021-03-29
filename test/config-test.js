@@ -51,6 +51,7 @@ describe('Checking "defaultConfig"', () => {
     });
 });
 
+
 describe('Checking server', () => {
     it('Server sends status 200', async () => {
         const objServer = await server;
