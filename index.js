@@ -4,7 +4,6 @@ import Server from './src/server.js';
 import path from 'path';
 import { readFile } from 'fs/promises';
 
-//TODO: test server
 //TODO: make config like class
 
 

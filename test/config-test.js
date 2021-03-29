@@ -1,6 +1,7 @@
 import defaultConfig, { config, HOST, PORT } from '../src/config.js';
+import server from '../index.js';
 import { expect } from 'chai';
-
+import got from 'got';
 
 describe('Checking "HOST"', () => {
     it('"HOST" equals "localhost"', () => {
@@ -47,5 +48,19 @@ describe('Checking "defaultConfig"', () => {
     });
     it('"defaultConfig"\'s property PORT equals localhost', () => {
         expect(defaultConfig['PORT'], 'config\'s property "PORT" doesn\'t equal localhost').to.equal('1337');
+    });
+});
+
+
+describe('Checking server', () => {
+    it('Server sends status 200', async () => {
+        const objServer = await server;
+
+        await objServer.start();
+        const response = await got(`http://${HOST}:${PORT}/`);
+
+        await objServer.stop();
+
+        expect(response.statusCode, 'Server doesn\'t send status 200').to.equal(200);
     });
 });
