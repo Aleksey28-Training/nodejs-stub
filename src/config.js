@@ -1,51 +1,49 @@
 import { config as envConfig } from 'dotenv';
 import debug from 'debug';
+import * as GLOBALS from './globals.js';
+
+const DEFAULTS = { ...GLOBALS };
 
 envConfig();
 
 const DEBUG_PREFIX_APP    = 'app';
 const DEBUG_PREFIX_CONFIG = 'config';
+const DEBUG_PREFIX_GLOBAL = 'global';
 
-const debugApp    = debug(DEBUG_PREFIX_APP);
-const debugConfig = debug(DEBUG_PREFIX_CONFIG);
+export const debugApp    = debug(DEBUG_PREFIX_APP);
+export const debugConfig = debug(DEBUG_PREFIX_CONFIG);
+export const debugGlobal = debug(DEBUG_PREFIX_GLOBAL);
 
-class Config {
-    constructor (port = '', host = '') {
-        const { envPort = '1337', envHost = 'localhost' } = process.env;
+export class Config {
 
-        this._port = port || envPort;
-        this._host = host || envHost;
+    static get defaults () {
+        return DEFAULTS;
+    }
+
+    static get globals () {
+        return GLOBALS;
+    }
+
+    static _getFromEnv () {
+        const { port, host } = process.env;
+
+        return { port, host };
+    }
+
+    constructor (values) {
+        this.values = { ...Config.defaults };
+        this.values.update(Object.assign(Config._getFromEnv(), values));
+
         //You need to tap $env:DEBUG="config" in terminal to turn on debug
-        debugConfig(`PORT: ${this._port}`);
-        debugConfig(`HOST: ${this._host}`);
-    }
+        debugConfig(`PORT: ${this.values.port}`);
+        debugConfig(`HOST: ${this.values.host}`);
 
-    get port () {
-        return this._port;
-    }
+        Config.globals.update(this.values);
 
-    get host () {
-        return this._host;
     }
 }
 
-const config = new Config();
-const PORT = config.port;
-const HOST = config.host;
+export default Config.globals;
 
-export default {
-    PORT,
-    HOST,
-    debugApp,
-    debugConfig,
-    Config,
-};
-
-export {
-    PORT,
-    HOST,
-    debugApp,
-    debugConfig,
-    Config,
-};
+export * from './globals.js';
 
