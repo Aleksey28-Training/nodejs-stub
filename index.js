@@ -16,9 +16,8 @@ async function run () {
     const server = new Server(config.port);
 
     if (esMain(import.meta)) {
-        await server.start().then(() => {
-            debugApp(`%o is listening on port: ${config.port}`, packageJSON.name);
-        });
+        await server.start();
+        debugApp(`%o is listening on port: ${config.port}`, packageJSON.name);
     }
 
     return server;
