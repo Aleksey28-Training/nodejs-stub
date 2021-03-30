@@ -1,20 +1,18 @@
 import http from 'http';
 import Koa from 'koa';
+import KoaStatic from 'koa-static';
+import path from 'path';
 import { once } from 'events';
 
 class Server {
-    constructor (port, staticPage = '') {
+    constructor (port) {
         this._port   = port;
         this._app    = new Koa();
         this._server = http.createServer(this._app.callback());
-        this._staticPage = staticPage;
     }
 
     async start () {
-
-        this._app.use(async ctx => {
-            ctx.body = this._staticPage;
-        });
+        this._app.use(KoaStatic(path.resolve() + '/public'));
 
         const listenPromise = once(this._server, 'listening');
 
@@ -22,6 +20,7 @@ class Server {
 
         return listenPromise;
     }
+
     async stop () {
         const closePromise = once(this._server, 'close');
 

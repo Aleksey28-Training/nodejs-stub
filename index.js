@@ -1,8 +1,6 @@
 import { Config, debugApp, debugConfig } from './src/config.js';
 import esMain from 'es-main';
 import Server from './src/server.js';
-import path from 'path';
-import { readFile } from 'fs/promises';
 import { readFileSync } from 'fs';
 
 async function run () {
@@ -15,13 +13,11 @@ async function run () {
     //NOTE: You need to tap $env:DEBUG="app" in terminal to turn on debug
     debugApp('%o booting', packageJSON.name);
 
-    const __dirname = path.resolve();
-    const staticPage = await readFile(path.join(__dirname, 'public/index.html'), { 'encoding': 'utf8' });
-    const server = new Server(config.port, staticPage);
+    const server = new Server(config.port);
 
     if (esMain(import.meta)) {
         await server.start().then(() => {
-            debugApp('%o is listening', packageJSON.name);
+            debugApp(`%o is listening on port: ${config.port}`, packageJSON.name);
         });
     }
 
