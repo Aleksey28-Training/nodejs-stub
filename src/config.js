@@ -11,26 +11,21 @@ const debugConfig = debug(DEBUG_PREFIX_CONFIG);
 
 class Config {
     constructor (port = '', host = '') {
-        this._port = port;
-        this._host = host;
+        const { envPort = '1337', envHost = 'localhost' } = process.env;
+
+        this._port = port || envPort;
+        this._host = host || envHost;
+        //You need to tap $env:DEBUG="config" in terminal to turn on debug
+        debugConfig(`PORT: ${this._port}`);
+        debugConfig(`HOST: ${this._host}`);
     }
 
     get port () {
-        const { port = '1337' } = process.env;
-
-        //You need to tap $env:DEBUG="config" in terminal to turn on debug
-        debugConfig(`PORT: ${this._port || port}`);
-
-        return this._port || port;
+        return this._port;
     }
 
     get host () {
-        const { host = 'localhost' } = process.env;
-
-        //You need to tap $env:DEBUG="config" in terminal to turn on debug
-        debugConfig(`HOST: ${this._host || host}`);
-
-        return this._host || host;
+        return this._host;
     }
 }
 
