@@ -17,13 +17,13 @@ class Server {
         const config = new Config({ host: 'localhost', port: 1337 });
 
         //NOTE: You need to tap $env:DEBUG="config" in terminal to turn on debug
-        debugConfig('%O', config);
+        debugConfig(config);
 
         const { port } = Config.globals;
         const packageJSON = JSON.parse(readFileSync('./package.json', 'utf8'));
 
         //NOTE: You need to tap $env:DEBUG="app" in terminal to turn on debug
-        debugApp('%o booting', packageJSON.name);
+        debugApp(`${packageJSON.name} booting`);
 
         return new Server(port);
     }
