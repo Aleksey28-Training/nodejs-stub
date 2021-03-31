@@ -1,31 +1,49 @@
 import { config as envConfig } from 'dotenv';
-import { readFileSync } from 'fs';
 import debug from 'debug';
+import * as GLOBALS from './globals.js';
+
+const DEFAULTS = { ...GLOBALS };
 
 envConfig();
 
-const { PORT = '1337', HOST = 'localhost' } = process.env;
-
-const packageJSON = JSON.parse(readFileSync('./package.json', 'utf8'));
-
 const DEBUG_PREFIX_APP    = 'app';
 const DEBUG_PREFIX_CONFIG = 'config';
+const DEBUG_PREFIX_GLOBAL = 'global';
 
-const debugApp    = debug(DEBUG_PREFIX_APP);
-const debugConfig = debug(DEBUG_PREFIX_CONFIG);
+export const debugApp    = debug(DEBUG_PREFIX_APP);
+export const debugConfig = debug(DEBUG_PREFIX_CONFIG);
+export const debugGlobal = debug(DEBUG_PREFIX_GLOBAL);
 
-//NOTE: You need to tap $env:DEBUG="config" in terminal to turn on debug
-debugApp('%o booting', packageJSON.name);
+export class Config {
 
-debugConfig(`PORT: ${PORT}`);
-debugConfig(`HOST: ${HOST}`);
+    static get defaults () {
+        return DEFAULTS;
+    }
 
-export default {
-    PORT,
-    HOST
-};
+    static get globals () {
+        return GLOBALS;
+    }
 
-export {
-    PORT,
-    HOST,
-};
+    static _getFromEnv () {
+        const { port, host } = process.env;
+
+        return { port, host };
+    }
+
+    constructor (values) {
+        this.values = { ...Config.defaults };
+        this.values.update(Object.assign(Config._getFromEnv(), values));
+
+        //You need to tap $env:DEBUG="config" in terminal to turn on debug
+        debugConfig(`PORT: ${this.values.port}`);
+        debugConfig(`HOST: ${this.values.host}`);
+
+        Config.globals.update(this.values);
+
+    }
+}
+
+export default Config.globals;
+
+export * from './globals.js';
+
