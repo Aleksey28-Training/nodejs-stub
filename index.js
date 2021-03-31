@@ -4,12 +4,13 @@ import Server from './src/server.js';
 
 const server = Server.create();
 
-if (esMain(import.meta)) {
-    (async function () {
-        await server.start();
-        //NOTE: You need to tap $env:DEBUG="app" in terminal to turn on debug
-        debugApp(`App is listening on port: ${Config.port}`);
-    })();
+async function runServer () {
+    await server.start();
+    //NOTE: You need to tap $env:DEBUG="app" in terminal to turn on debug
+    debugApp(`App is listening on port: ${Config.port}`);
 }
+
+if (esMain(import.meta))
+    runServer();
 
 export default server;
