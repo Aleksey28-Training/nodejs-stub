@@ -1,11 +1,12 @@
 import http from 'http';
 import Koa from 'koa';
-import KoaStatic from 'koa-static';
+// import KoaStatic from 'koa-static';
 import path from 'path';
 import { once } from 'events';
 import { Config, debugApp, debugConfig } from './config.js';
 import { readFileSync } from 'fs';
 import ApiGithub from './apiGithub.js';
+import Pug from 'koa-pug';
 
 class Server {
     constructor (port) {
@@ -18,7 +19,7 @@ class Server {
         //NOTE: You need to tap $env:DEBUG="config" in terminal to turn on debug
         debugConfig(Config);
 
-        const { port } = Config.globals;
+        const { port }    = Config.globals;
         const packageJSON = JSON.parse(readFileSync('./package.json', 'utf8'));
 
         //NOTE: You need to tap $env:DEBUG="app" in terminal to turn on debug
@@ -30,15 +31,32 @@ class Server {
 
     async start () {
 
-        const listenPromise = once(this._server, 'listening');
+        const listenPromise          = once(this._server, 'listening');
         const { token, owner, repo } = Config.globals;
-        const apiGithubObj = new ApiGithub(token);
-        const listWFRuns = await apiGithubObj.getListRuns(owner, repo);
-        const runsKey = 'workflow_runs';
+        const apiGithubObj           = new ApiGithub(token);
+        const listWFRuns             = await apiGithubObj.getListRuns(owner, repo);
+        const runsKey                = 'workflow_runs';
+
+        debugApp(path.join(path.resolve(), 'views'));
 
         debugApp(`Runs count: ${listWFRuns[runsKey] && listWFRuns[runsKey].length}`);
 
-        this._app.use(KoaStatic(path.resolve() + '/public'));
+        const locals = {};
+        const pug = new Pug({
+            viewPath: path.join(path.resolve(), 'views'),
+            locals:   locals,
+            basedir:  path.resolve(),
+            app:      this._app
+        });
+
+        pug.locals.someKey = 'some value';
+
+        this._app.use(async ctx => {
+            await ctx.render('index', locals, true);
+        });
+
+        // this._app.use(KoaStatic(path.join(path.resolve(), 'public')));
+
         this._server.listen(this._port);
 
         return listenPromise;
