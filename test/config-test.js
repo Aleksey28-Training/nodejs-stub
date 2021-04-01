@@ -81,12 +81,10 @@ describe('Checking "defaultConfig"', () => {
 
 describe('Checking server', () => {
     it('Server sends status 200', async () => {
-        const objServer = await server;
-
-        await objServer.start();
+        await server.start();
         const response = await got(`http://${config.host}:${config.port}/`);
 
-        await objServer.stop();
+        await server.stop();
 
         expect(response.statusCode, 'Server doesn\'t send status 200').to.equal(200);
     });
