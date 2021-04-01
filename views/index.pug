@@ -1,6 +1,14 @@
-doctype html
 html
     head
-    title = "Hello Pug"
+        title=name
     body
-        p.greetings#people Hello Views!
+        ul
+            li
+                ul
+                    each column in columns
+                        li=column
+            each val in values.length ? values : ['There are no values']
+                li
+                    ul
+                        each column in columns
+                            li=val[column]

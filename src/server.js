@@ -1,6 +1,5 @@
 import http from 'http';
 import Koa from 'koa';
-// import KoaStatic from 'koa-static';
 import path from 'path';
 import { once } from 'events';
 import { Config, debugApp, debugConfig } from './config.js';
@@ -31,18 +30,31 @@ class Server {
 
     async start () {
 
-        const listenPromise          = once(this._server, 'listening');
+        //NOTE: getting settings
         const { token, owner, repo } = Config.globals;
-        const apiGithubObj           = new ApiGithub(token);
-        const listWFRuns             = await apiGithubObj.getListRuns(owner, repo);
-        const runsKey                = 'workflow_runs';
 
-        debugApp(path.join(path.resolve(), 'views'));
+        //NOTE: getting data from github
+        const apiGithubObj = new ApiGithub(token);
+        const listWFRuns   = await apiGithubObj.getListRuns(owner, repo);
+        const runsKey      = 'workflow_runs';
 
         debugApp(`Runs count: ${listWFRuns[runsKey] && listWFRuns[runsKey].length}`);
 
-        const locals = {};
-        const pug = new Pug({
+        //NOTE: rendering output page
+        const locals = {
+            columns: [
+                'id',
+                'name',
+                'head_branch',
+                'run_number',
+                'status',
+                'conclusion',
+                'workflow_id',
+                'created_at'
+            ],
+            values: listWFRuns[runsKey] ? listWFRuns[runsKey] : [],
+        };
+        const pug    = new Pug({
             viewPath: path.join(path.resolve(), 'views'),
             locals:   locals,
             basedir:  path.resolve(),
@@ -50,12 +62,12 @@ class Server {
         });
 
         pug.locals.someKey = 'some value';
-
         this._app.use(async ctx => {
             await ctx.render('index', locals, true);
         });
 
-        // this._app.use(KoaStatic(path.join(path.resolve(), 'public')));
+        //NOTE: enabling server listening
+        const listenPromise = once(this._server, 'listening');
 
         this._server.listen(this._port);
 
