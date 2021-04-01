@@ -1,0 +1,7 @@
+.table__column {
+  padding: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+}
