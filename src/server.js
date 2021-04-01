@@ -5,6 +5,7 @@ import path from 'path';
 import { once } from 'events';
 import { Config, debugApp, debugConfig } from './config.js';
 import { readFileSync } from 'fs';
+import ApiGithub from './apiGithub.js';
 
 class Server {
     constructor (port) {
@@ -14,25 +15,30 @@ class Server {
     }
 
     static create () {
-        const config = new Config({ host: 'localhost', port: 1337 });
-
         //NOTE: You need to tap $env:DEBUG="config" in terminal to turn on debug
-        debugConfig(config);
+        debugConfig(Config);
 
         const { port } = Config.globals;
         const packageJSON = JSON.parse(readFileSync('./package.json', 'utf8'));
 
         //NOTE: You need to tap $env:DEBUG="app" in terminal to turn on debug
+        // debugApp(listWF);
         debugApp(`${packageJSON.name} booting`);
 
         return new Server(port);
     }
 
     async start () {
-        this._app.use(KoaStatic(path.resolve() + '/public'));
 
         const listenPromise = once(this._server, 'listening');
+        const { token, owner, repo } = Config.globals;
+        const apiGithubObj = new ApiGithub(token);
+        const listWFRuns = await apiGithubObj.getListRuns(owner, repo);
+        const runsKey = 'workflow_runs';
 
+        debugApp(`Runs count: ${listWFRuns[runsKey] && listWFRuns[runsKey].length}`);
+
+        this._app.use(KoaStatic(path.resolve() + '/public'));
         this._server.listen(this._port);
 
         return listenPromise;
