@@ -1,6 +1,6 @@
-import http from 'http';
+import * as http from 'http';
 import Koa from 'koa';
-import path from 'path';
+import * as path from 'path';
 import { once } from 'events';
 import { Config, debugApp, debugConfig } from './config.js';
 import { readFileSync } from 'fs';
@@ -8,7 +8,12 @@ import Pug from 'koa-pug';
 import RunsRouter from './routes/runs.js';
 
 class Server {
-    constructor (port) {
+
+    _port: number
+    _app: Koa
+    _server: http.Server
+
+    constructor (port: number) {
         this._port   = port;
         this._app    = new Koa();
         this._pug = new Pug({

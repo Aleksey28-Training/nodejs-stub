@@ -16,7 +16,18 @@ export const debugConfig = debug(DEBUG_PREFIX_CONFIG);
 export const debugGlobal = debug(DEBUG_PREFIX_GLOBAL);
 export const debugApiGithub = debug(DEBUG_PREFIX_GITHUB_API);
 
+interface ValuesInterface {
+    port?: number,
+    host?: string,
+    owner?: string,
+    repo?: string,
+    token?: string,
+    update?: ({}) => void
+}
+
 export class Config {
+
+    values: ValuesInterface
 
     static get defaults () {
         return DEFAULTS;
@@ -36,9 +47,9 @@ export class Config {
         };
     }
 
-    constructor (values) {
-        this.values = { ...Config.defaults };
-        this.values.update(Object.assign(Config._getFromEnv(), values));
+    constructor(values: ValuesInterface) {
+        this.values = {...Config.defaults};
+        this.values.update && this.values.update(Object.assign(Config._getFromEnv(), values));
 
         if (!this.values.owner || !this.values.repo)
             throw new Error('Owner or repo are empty!');

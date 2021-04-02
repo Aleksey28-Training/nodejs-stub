@@ -6,7 +6,16 @@ export let owner = '';
 export let repo = '';
 export let token = '';
 
-export function update (newValues = {}) {
+interface UpdateInterface {
+    port?: number,
+    host?: string,
+    owner?: string,
+    repo?: string,
+    token?: string,
+}
+
+export function update (this: any, newValues: UpdateInterface = {}) {
+    debugGlobal(typeof this);
     if (this && !(this[Symbol.toStringTag] === 'Module'))
         return Object.assign(this, newValues);
 
