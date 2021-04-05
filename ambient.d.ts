@@ -1,1 +1,2 @@
-declare module "es-main"
+declare module 'es-main'
+

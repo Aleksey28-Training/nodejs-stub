@@ -17,29 +17,35 @@ export const debugGlobal = debug(DEBUG_PREFIX_GLOBAL);
 export const debugApiGithub = debug(DEBUG_PREFIX_GITHUB_API);
 
 interface ValuesInterface {
-    port?: number,
-    host?: string,
+    port: number,
+    host: string,
     owner?: string,
     repo?: string,
     token?: string,
-    update?: ({}) => void
+    update?: (values: ValuesInterface) => ({
+        port: number,
+        host: string,
+        owner?: string,
+        repo?: string,
+        token?: string,
+    })
 }
 
 export class Config {
 
-    values: ValuesInterface
+    values: ValuesInterface;
 
-    static get defaults () {
+    static get defaults (): ValuesInterface {
         return DEFAULTS;
     }
 
-    static get globals () {
+    static get globals (): ValuesInterface {
         return GLOBALS;
     }
 
-    static _getFromEnv () {
+    static _getFromEnv (): ValuesInterface {
         return {
-            port:  process.env['PORT'],
+            port:  Number(process.env['PORT']),
             host:  process.env['HOST'],
             owner: process.env['OWNER'],
             repo:  process.env['REPO'],
@@ -47,9 +53,10 @@ export class Config {
         };
     }
 
-    constructor(values: ValuesInterface) {
-        this.values = {...Config.defaults};
-        this.values.update && this.values.update(Object.assign(Config._getFromEnv(), values));
+    constructor (values: ValuesInterface) {
+        this.values = { ...Config.defaults };
+        if (this.values.update)
+            this.values.update(Object.assign(Config._getFromEnv(), values));
 
         if (!this.values.owner || !this.values.repo)
             throw new Error('Owner or repo are empty!');
@@ -61,7 +68,8 @@ export class Config {
         debugConfig(`REPO: ${this.values.repo}`);
         debugConfig(`TOKEN: ${this.values.token}`);
 
-        Config.globals.update(this.values);
+        if (Config.globals.update)
+            Config.globals.update(this.values);
 
     }
 }

@@ -9,9 +9,9 @@ import RunsRouter from './routes/runs.js';
 
 class Server {
 
-    _port: number
-    _app: Koa
-    _server: http.Server
+    _port: number;
+    _app: Koa;
+    _server: http.Server;
 
     constructor (port: number) {
         this._port   = port;
@@ -25,11 +25,11 @@ class Server {
         this._server = http.createServer(this._app.callback());
     }
 
-    static create () {
+    static create (): Server {
         //NOTE: You need to tap $env:DEBUG="config" in terminal to turn on debug
         debugConfig(Config);
 
-        const { port }    = Config.globals;
+        const { port } = Config.globals;
         const packageJSON = JSON.parse(readFileSync('./package.json', 'utf8'));
 
         //NOTE: You need to tap $env:DEBUG="app" in terminal to turn on debug
@@ -47,7 +47,7 @@ class Server {
         return listenPromise;
     }
 
-    async stop () {
+    async stop (): Promise<unknown> {
         const closePromise = once(this._server, 'close');
 
         this._server.close();

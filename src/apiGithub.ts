@@ -1,28 +1,37 @@
-import got, {Method, Response} from 'got';
-import {debugApiGithub} from './config.js';
-import {OptionsOfDefaultResponseBody} from "got/dist/source/create";
+import got, { CancelableRequest, Method, Response } from 'got';
+import { debugApiGithub } from './config.js';
+import { OptionsOfDefaultResponseBody } from 'got/dist/source/create';
 
 interface ProxyInterface {
     relativePath: string,
-    method: Method|undefined,
-    headers: {},
+    method: Method | undefined,
+    headers: {
+        'Content-Type'?: string,
+        'authorization'?: string
+    },
     body?: string
+}
+
+interface HandleResponseInterface {
+    status?: string,
+    message?: string,
+    'workflow_runs'?: Array<{ unknown: string }>
 }
 
 export default class ApiGithub {
 
-    protected _token: string
-    protected _baseUrl: string
+    protected _token: string;
+    protected _baseUrl: string;
 
-    constructor(token: string) {
+    constructor (token: string) {
         this._token = token;
         this._baseUrl = 'https://api.github.com';
     }
 
-    _getProxy({relativePath, method, headers = {}, body = ''}: ProxyInterface) {
+    _getProxy ({ relativePath, method, headers = {}, body = '' }: ProxyInterface): CancelableRequest<Response<string>> {
         const options: OptionsOfDefaultResponseBody = {
             method,
-            headers: {...headers},
+            headers: { ...headers },
         };
 
         if (body)
@@ -32,17 +41,18 @@ export default class ApiGithub {
         return got(`${this._baseUrl}${relativePath}`, options);
     }
 
-    _handleResponse(response: Response) {
+    _handleResponse (response: Response): HandleResponseInterface {
 
-        const result = typeof response.body === "string" ? JSON.parse(response.body) : "";
+        const result = typeof response.body === 'string' ? JSON.parse(response.body) : '';
 
         debugApiGithub(`Status code: ${response.statusCode}`);
 
         if (response.statusCode === 200)
             return result;
 
+
         return {
-            status: response.statusMessage,
+            status:  response.statusMessage,
             message: result && result.message
                 ? result.message
                 : 'Shit happens!\nTry again.',
@@ -51,7 +61,7 @@ export default class ApiGithub {
     }
 
 
-    async getListWorkflows(owner: string, repo: string) {
+    async getListWorkflows (owner: string, repo: string): Promise<HandleResponseInterface> {
 
         //NOTE: You need to tap $env:DEBUG="github api" in terminal to turn on debug
         debugApiGithub(`Token: ${this._token}`);
@@ -60,9 +70,9 @@ export default class ApiGithub {
 
         const params: ProxyInterface = {
             relativePath: `/repos/${owner}/${repo}/actions/workflows`,
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
+            method:       'GET',
+            headers:      {
+                'Content-Type':  'application/json',
                 'authorization': this._token
             },
         };
@@ -71,7 +81,7 @@ export default class ApiGithub {
         return this._handleResponse(response);
     }
 
-    async getListRuns(owner: string, repo: string) {
+    async getListRuns (owner: string, repo: string): Promise<HandleResponseInterface> {
 
         //NOTE: You need to tap $env:DEBUG="github api" in terminal to turn on debug
         debugApiGithub(`Token: ${this._token}`);
@@ -80,9 +90,9 @@ export default class ApiGithub {
 
         const params: ProxyInterface = {
             relativePath: `/repos/${owner}/${repo}/actions/runs`,
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
+            method:       'GET',
+            headers:      {
+                'Content-Type':  'application/json',
                 'authorization': this._token
             },
         };
