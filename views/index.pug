@@ -19,14 +19,16 @@ html
         main.content
             section.runs
                 h2.runs__title Runs
-                table.table
-                    thead
-                        tr
-                            each column in columns
-                                th.table__column.table__column_type_head=column
-                    tbody
-                        if values
-                            each val in values.length ? values : ['There are no values']
+                if values
+                    table.table
+                        thead
+                            tr
+                                each column in columns
+                                    th.table__column.table__column_type_head=column
+                        tbody
+                            each val in values
                                 tr
                                     each column in columns
                                         td.table__column.table__column_type_body=val[column]
+                else
+                    p There are no values
