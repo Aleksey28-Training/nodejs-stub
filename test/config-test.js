@@ -61,3 +61,5 @@ describe('Checking server', () => {
         expect(response.statusCode, 'Server doesn\'t send status 200').to.equal(200);
     });
 });
+
+//TODO: write tests for github APIs after migrating to TypeScript
