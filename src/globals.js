@@ -2,8 +2,8 @@ import { debugGlobal } from './config.js';
 
 export let host = 'localhost';
 export let port = 1337;
-export let owner = '';
-export let repo = '';
+export let owner = 'Aleksey28-Training';
+export let repo = 'nodejs-stub';
 export let token = '';
 
 export function update (newValues = {}) {
