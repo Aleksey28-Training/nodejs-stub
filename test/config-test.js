@@ -1,4 +1,4 @@
-import defaultConfig, { debugConfig, default as config, host, port, } from '../src/config.js';
+import defaultConfig, { debugConfig, default as config, host, owner, port, repo } from '../src/config.js';
 import server from '../index.js';
 import { expect } from 'chai';
 import got from 'got';
@@ -15,6 +15,18 @@ describe('Checking "HOST"', () => {
 describe('Checking "PORT"', () => {
     it('"PORT" equals "1337"', () => {
         expect(port, 'PORT doesn\'t equal 1337').to.equal(1337);
+    });
+});
+
+describe('Checking "OWNER"', () => {
+    it('"OWNER" doesn\'t equal ""', () => {
+        expect(owner, 'OWNER equals ""').not.to.equal('');
+    });
+});
+
+describe('Checking "REPO"', () => {
+    it('"REPO" doesn\'t equal ""', () => {
+        expect(repo, 'REPO equals ""').not.to.equal('');
     });
 });
 
