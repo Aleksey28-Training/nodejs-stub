@@ -1,4 +1,4 @@
-import defaultConfig, { debugConfig, default as config, host, owner, port, repo, token } from '../src/config.js';
+import defaultConfig, { debugConfig, default as config, host, owner, port, repo } from '../src/config.js';
 import server from '../index.js';
 import { expect } from 'chai';
 import got from 'got';
@@ -27,12 +27,6 @@ describe('Checking "OWNER"', () => {
 describe('Checking "REPO"', () => {
     it('"REPO" doesn\'t equal ""', () => {
         expect(repo, 'REPO equals ""').not.to.equal('');
-    });
-});
-
-describe('Checking "TOKEN"', () => {
-    it('"TOKEN" doesn\'t equal ""', () => {
-        expect(token, 'TOKEN equals ""').not.to.equal('');
     });
 });
 
