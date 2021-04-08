@@ -18,18 +18,6 @@ describe('Checking "PORT"', () => {
     });
 });
 
-describe('Checking "OWNER"', () => {
-    it('"OWNER" doesn\'t equal ""', () => {
-        expect(owner, 'OWNER equals ""').not.to.equal('');
-    });
-});
-
-describe('Checking "REPO"', () => {
-    it('"REPO" doesn\'t equal ""', () => {
-        expect(repo, 'REPO equals ""').not.to.equal('');
-    });
-});
-
 describe('Checking "config"', () => {
     it('config has property HOST', () => {
         expect(config, 'config must have property HOST').to.have.property('host');
