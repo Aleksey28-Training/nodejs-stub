@@ -40,6 +40,9 @@ export class Config {
         this.values = { ...Config.defaults };
         this.values.update(Object.assign(Config._getFromEnv(), values));
 
+        if (!this.values.owner || !this.values.repo)
+            throw new Error('Owner or repo are empty!');
+
         //You need to tap $env:DEBUG="config" in terminal to turn on debug
         debugConfig(`PORT: ${this.values.port}`);
         debugConfig(`HOST: ${this.values.host}`);
