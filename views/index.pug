@@ -1,0 +1,14 @@
+html
+    head
+        title=name
+    body
+        ul
+            li
+                ul
+                    each column in columns
+                        li=column
+            each val in values.length ? values : ['There are no values']
+                li
+                    ul
+                        each column in columns
+                            li=val[column]

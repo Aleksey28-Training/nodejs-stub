@@ -3,8 +3,8 @@ import esMain from 'es-main';
 import Server from './src/server.js';
 import { readFileSync } from 'fs';
 
-const server = Server.create();
 const config = new Config({ host: 'localhost', port: 1337 });
+const server = Server.create();
 
 //NOTE: You need to tap $env:DEBUG="config" in terminal to turn on debug
 debugConfig(config);
