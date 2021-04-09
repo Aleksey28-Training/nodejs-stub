@@ -1,4 +1,4 @@
-import defaultConfig, { debugConfig, default as config, host, port } from '../src/config.js';
+import defaultConfig, { debugConfig, default as config, host, owner, port, repo } from '../src/config.js';
 import server from '../index.js';
 import { expect } from 'chai';
 import got from 'got';
@@ -18,6 +18,18 @@ describe('Checking "PORT"', () => {
     });
 });
 
+describe('Checking "OWNER"', () => {
+    it('"OWNER" doesn\'t equal ""', () => {
+        expect(owner, 'OWNER equals ""').not.to.equal('');
+    });
+});
+
+describe('Checking "REPO"', () => {
+    it('"REPO" doesn\'t equal ""', () => {
+        expect(repo, 'REPO equals ""').not.to.equal('');
+    });
+});
+
 describe('Checking "config"', () => {
     it('config has property HOST', () => {
         expect(config, 'config must have property HOST').to.have.property('host');
@@ -30,6 +42,15 @@ describe('Checking "config"', () => {
     });
     it('config\'s property PORT equals "1337"', () => {
         expect(config['port'], 'config\'s property PORT doesn\'t equal "1337"').to.equal(1337);
+    });
+    it('config has property OWNER', () => {
+        expect(config, 'config must have property OWNER').to.have.property('owner');
+    });
+    it('config has property REPO', () => {
+        expect(config, 'config must have property REPO').to.have.property('repo');
+    });
+    it('config has property TOKEN', () => {
+        expect(config, 'config must have property TOKEN').to.have.property('token');
     });
 });
 
@@ -45,6 +66,15 @@ describe('Checking "defaultConfig"', () => {
     });
     it('"defaultConfig"\'s property PORT equals localhost', () => {
         expect(defaultConfig['port'], 'config\'s property "PORT" doesn\'t equal localhost').to.equal(1337);
+    });
+    it('defaultConfig has property OWNER', () => {
+        expect(defaultConfig, 'defaultConfig must have property OWNER').to.have.property('owner');
+    });
+    it('defaultConfig has property REPO', () => {
+        expect(defaultConfig, 'defaultConfig must have property REPO').to.have.property('repo');
+    });
+    it('defaultConfig has property TOKEN', () => {
+        expect(defaultConfig, 'defaultConfig must have property TOKEN').to.have.property('token');
     });
 });
 

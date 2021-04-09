@@ -27,9 +27,13 @@ export class Config {
     }
 
     static _getFromEnv () {
-        const { port, host, owner, repo, token } = process.env;
-
-        return { port, host, owner, repo, token };
+        return {
+            port:  process.env['PORT'],
+            host:  process.env['HOST'],
+            owner: process.env['OWNER'],
+            repo:  process.env['REPO'],
+            token: process.env['GITHUB_TOKEN']
+        };
     }
 
     constructor (values) {
