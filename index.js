@@ -5,7 +5,6 @@ import { readFileSync } from 'fs';
 
 const config = new Config({ host: 'localhost', port: 1337 });
 const server = Server.create();
-const config = new Config({ host: 'localhost', port: 1337 });
 
 //NOTE: You need to tap $env:DEBUG="config" in terminal to turn on debug
 debugConfig(config);
