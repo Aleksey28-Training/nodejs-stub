@@ -1,0 +1,13 @@
+.table__column_type_head {
+  position: sticky;
+  top: 0;
+  background: #6c7ae0;
+  text-align: left;
+  font-weight: normal;
+  font-size: 1.1rem;
+  color: white;
+}
+
+.table__column_type_head:last-child {
+  border: 0;
+}

@@ -1,0 +1,7 @@
+.page {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  padding: 0 15px;
+  margin: auto;
+  box-sizing: border-box;
+}

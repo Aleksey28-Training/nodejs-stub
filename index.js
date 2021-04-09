@@ -9,6 +9,9 @@ const server = Server.create();
 //NOTE: You need to tap $env:DEBUG="config" in terminal to turn on debug
 debugConfig(config);
 
+//NOTE: You need to tap $env:DEBUG="config" in terminal to turn on debug
+debugConfig(config);
+
 async function runServer () {
     const packageJSON = JSON.parse(readFileSync('./package.json', 'utf8'));
 
