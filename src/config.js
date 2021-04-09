@@ -9,10 +9,12 @@ envConfig();
 const DEBUG_PREFIX_APP    = 'app';
 const DEBUG_PREFIX_CONFIG = 'config';
 const DEBUG_PREFIX_GLOBAL = 'global';
+const DEBUG_PREFIX_GITHUB_API = 'github api';
 
 export const debugApp    = debug(DEBUG_PREFIX_APP);
 export const debugConfig = debug(DEBUG_PREFIX_CONFIG);
 export const debugGlobal = debug(DEBUG_PREFIX_GLOBAL);
+export const debugApiGithub = debug(DEBUG_PREFIX_GITHUB_API);
 
 export class Config {
 
@@ -25,9 +27,9 @@ export class Config {
     }
 
     static _getFromEnv () {
-        const { port, host } = process.env;
+        const { port, host, owner, repo, token } = process.env;
 
-        return { port, host };
+        return { port, host, owner, repo, token };
     }
 
     constructor (values) {
@@ -37,6 +39,9 @@ export class Config {
         //You need to tap $env:DEBUG="config" in terminal to turn on debug
         debugConfig(`PORT: ${this.values.port}`);
         debugConfig(`HOST: ${this.values.host}`);
+        debugConfig(`OWNER: ${this.values.owner}`);
+        debugConfig(`REPO: ${this.values.repo}`);
+        debugConfig(`TOKEN: ${this.values.token}`);
 
         Config.globals.update(this.values);
 
