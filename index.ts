@@ -9,7 +9,7 @@ const server = Server.create();
 //NOTE: You need to tap $env:DEBUG="config" in terminal to turn on debug
 debugConfig(config);
 
-async function runServer () {
+async function runServer (): Promise<void> {
     const packageJSON = JSON.parse(readFileSync('./package.json', 'utf8'));
 
     await server.start();
@@ -19,5 +19,6 @@ async function runServer () {
 
 if (esMain(import.meta))
     runServer();
+
 
 export default server;

@@ -1,8 +1,14 @@
 import { Config, debugApp } from '../config.js';
 import ApiGithub from '../apiGithub.js';
 import RunsModel from '../models/runs.js';
+import { RenderOptions } from 'koa-pug/dist';
 
 class RunsController {
+    _apiGithubObj: ApiGithub;
+    _owner: string;
+    _repo: string;
+    _model: RunsModel;
+
     constructor () {
         const { token, owner, repo } = Config.globals;
 
@@ -12,10 +18,10 @@ class RunsController {
         this._model = new RunsModel();
     }
 
-    async renderRuns (ctx) {
+    async renderRuns (ctx: RenderOptions): Promise<void> {
 
-        const listWFRuns   = await this._apiGithubObj.getListRuns(this._owner, this._repo);
-        const runsKey      = 'workflow_runs';
+        const listWFRuns = await this._apiGithubObj.getListRuns(this._owner, this._repo);
+        const runsKey = 'workflow_runs';
 
         this._model.runs = listWFRuns[runsKey] || [];
 
