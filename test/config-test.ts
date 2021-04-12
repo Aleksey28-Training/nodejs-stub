@@ -1,7 +1,18 @@
-import defaultConfig, { debugConfig, default as config, host, owner, port, repo } from '../src/config.js';
+import defaultConfig, {
+    debugApiGithub,
+    debugConfig,
+    default as config,
+    host,
+    owner,
+    port,
+    repo, token
+} from '../src/config.js';
 import server from '../index.js';
 import { expect } from 'chai';
 import got from 'got';
+import sinon from 'sinon';
+import proxyquire from 'proxyquire';
+import { RUNS } from './constants-test';
 
 debugConfig(typeof config);
 debugConfig(config);
@@ -90,4 +101,29 @@ describe('Checking server', () => {
     });
 });
 
-//TODO: write tests for github APIs after migrating to TypeScript
+describe('Checking api GitHub', () => {
+    it('Getting runs should working', async () => {
+        const myGot = sinon.stub();
+
+        myGot.withArgs('https://api.github.com/repos/Aleksey28-Training/nodejs-stub/actions/runs').returns(RUNS);
+
+        myGot.withArgs('https://api.github.com/repos/Aleksey28-/nodejs-stub/actions/runs').returns({
+            statusCode: 404,
+            message:    'Shit happens!\nTry again.'
+        });
+
+
+        const { default: ApiGithub } = proxyquire('../src/apiGithub', {
+            'got': myGot,
+        });
+
+        debugApiGithub(ApiGithub);
+
+        const apiGithubObject = new ApiGithub(token);
+
+        const result = await apiGithubObject.getListRuns(owner, repo);
+
+        expect(JSON.stringify(result)).to.be.equal(JSON.stringify(RUNS.body));
+        expect(result.status).to.be.not.equal(404);
+    });
+});
