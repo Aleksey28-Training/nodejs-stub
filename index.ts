@@ -20,4 +20,5 @@ async function runServer (): Promise<void> {
 if (esMain(import.meta))
     runServer();
 
+
 export default server;

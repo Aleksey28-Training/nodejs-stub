@@ -23,8 +23,8 @@ export default class ApiGithub {
     protected _token: string;
     protected _baseUrl: string;
 
-    constructor (token: string) {
-        this._token = token;
+    constructor (token: string | undefined) {
+        this._token = token || '';
         this._baseUrl = 'https://api.github.com';
     }
 

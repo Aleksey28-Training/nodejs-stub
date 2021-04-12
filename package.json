@@ -33,6 +33,7 @@
     "@types/jest": "^26.0.22",
     "@types/koa": "^2.13.1",
     "@types/koa-pug": "^4.0.0",
+    "@types/koa-router": "^7.4.1",
     "@types/pug": "^2.0.4",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",

@@ -12,10 +12,12 @@ class Server {
     _port: number;
     _app: Koa;
     _server: http.Server;
+    _pug: Pug;
+    _runsRouter: RunsRouter;
 
     constructor (port: number) {
-        this._port   = port;
-        this._app    = new Koa();
+        this._port = port;
+        this._app = new Koa();
         this._pug = new Pug({
             viewPath: path.join(path.resolve(), 'views'),
             basedir:  path.resolve(),
@@ -38,7 +40,7 @@ class Server {
         return new Server(port);
     }
 
-    async start () {
+    async start (): Promise<unknown> {
         const listenPromise = once(this._server, 'listening');
 
         this._app.use(this._runsRouter.getRouter());

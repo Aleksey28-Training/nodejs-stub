@@ -9,8 +9,8 @@ export let token = '';
 interface UpdateInterface {
     port: number,
     host: string,
-    owner?: string,
-    repo?: string,
+    owner: string,
+    repo: string,
     token?: string,
     [Symbol.toStringTag]?: string,
 }
