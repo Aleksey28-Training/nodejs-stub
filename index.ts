@@ -1,5 +1,5 @@
 import { Config, debugApp, debugConfig } from './src/config.js';
-import esMain from 'es-main';
+// import esMain from 'es-main';
 import Server from './src/server.js';
 import { readFileSync } from 'fs';
 
@@ -17,7 +17,8 @@ async function runServer (): Promise<void> {
     debugApp(`App "${packageJSON.name}" is listening on port: ${Config.globals.port}`);
 }
 
-if (esMain(import.meta))
+// if (import.meta ? esMain(import.meta) : require.main === module)
+if (require.main === module)
     runServer();
 
 
