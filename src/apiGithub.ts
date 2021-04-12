@@ -34,16 +34,23 @@ export default class ApiGithub {
             headers: { ...headers },
         };
 
+
         if (body)
             options.body = body;
 
+
+        debugApiGithub(`URL: ${this._baseUrl}${relativePath}`);
+        debugApiGithub(`Options before request: `);
+        debugApiGithub(options);
 
         return got(`${this._baseUrl}${relativePath}`, options);
     }
 
     _handleResponse (response: Response): HandleResponseInterface {
 
-        const result = typeof response.body === 'string' ? JSON.parse(response.body) : '';
+        debugApiGithub(`Response: ${response}`);
+
+        const result = typeof response.body === 'string' ? JSON.parse(response.body) : response.body;
 
         debugApiGithub(`Status code: ${response.statusCode}`);
 
@@ -76,7 +83,7 @@ export default class ApiGithub {
                 'authorization': this._token
             },
         };
-        const response: Response = await this._getProxy(params);
+        const response = await this._getProxy(params);
 
         return this._handleResponse(response);
     }
@@ -96,7 +103,16 @@ export default class ApiGithub {
                 'authorization': this._token
             },
         };
-        const response = await this._getProxy(params);
+
+        let response;
+
+
+        try {
+            response = await this._getProxy(params);
+        }
+        catch (error) {
+            response = error.response;
+        }
 
         return this._handleResponse(response);
     }
