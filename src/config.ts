@@ -9,7 +9,7 @@ envConfig();
 const DEBUG_PREFIX_APP = 'app';
 const DEBUG_PREFIX_CONFIG = 'config';
 const DEBUG_PREFIX_GLOBAL = 'global';
-const DEBUG_PREFIX_GITHUB_API = 'github api';
+const DEBUG_PREFIX_GITHUB_API = 'github_api';
 
 export const debugApp = debug(DEBUG_PREFIX_APP);
 export const debugConfig = debug(DEBUG_PREFIX_CONFIG);

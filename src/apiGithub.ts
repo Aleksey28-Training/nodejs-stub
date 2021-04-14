@@ -1,6 +1,5 @@
 import got, { CancelableRequest, Method, Response } from 'got';
 import { debugApiGithub } from './config.js';
-import { OptionsOfDefaultResponseBody } from 'got/dist/source/create';
 
 interface ProxyInterface {
     relativePath: string,
@@ -18,6 +17,12 @@ interface HandleResponseInterface {
     'workflow_runs'?: Array<{ unknown: string }>
 }
 
+interface GotJSONResponse {
+    responseType: 'json',
+
+    [index: string]: unknown
+}
+
 export default class ApiGithub {
 
     protected _token: string;
@@ -28,28 +33,38 @@ export default class ApiGithub {
         this._baseUrl = 'https://api.github.com';
     }
 
-    _getProxy ({ relativePath, method, headers = {}, body = '' }: ProxyInterface): CancelableRequest<Response<string>> {
-        const options: OptionsOfDefaultResponseBody = {
+    _getProxy ({
+        relativePath,
+        method,
+        headers = {},
+        body = ''
+    }: ProxyInterface): CancelableRequest<Response<HandleResponseInterface>> {
+        const options: GotJSONResponse = {
             method,
-            headers: { ...headers },
+            headers:      { ...headers },
+            responseType: 'json'
         };
 
         if (body)
             options.body = body;
 
+        debugApiGithub(`URL: ${this._baseUrl}${relativePath}`);
+        debugApiGithub(`Options before request: `);
+        debugApiGithub(options);
 
         return got(`${this._baseUrl}${relativePath}`, options);
     }
 
-    _handleResponse (response: Response): HandleResponseInterface {
+    _handleResponse (response: Response<HandleResponseInterface>): HandleResponseInterface {
 
-        const result = typeof response.body === 'string' ? JSON.parse(response.body) : '';
+        debugApiGithub(`Response: ${response}`);
+
+        const result = response.body;
 
         debugApiGithub(`Status code: ${response.statusCode}`);
 
         if (response.statusCode === 200)
             return result;
-
 
         return {
             status:  response.statusMessage,
@@ -76,7 +91,7 @@ export default class ApiGithub {
                 'authorization': this._token
             },
         };
-        const response: Response = await this._getProxy(params);
+        const response = await this._getProxy(params);
 
         return this._handleResponse(response);
     }
@@ -96,7 +111,16 @@ export default class ApiGithub {
                 'authorization': this._token
             },
         };
-        const response = await this._getProxy(params);
+
+        let response;
+
+
+        try {
+            response = await this._getProxy(params);
+        }
+        catch (error) {
+            response = error.response;
+        }
 
         return this._handleResponse(response);
     }
