@@ -1,6 +1,5 @@
 import got, { CancelableRequest, Method, Response } from 'got';
 import { debugApiGithub } from './config.js';
-import { OptionsOfDefaultResponseBody } from 'got/dist/source/create';
 
 interface ProxyInterface {
     relativePath: string,
@@ -18,6 +17,12 @@ interface HandleResponseInterface {
     'workflow_runs'?: Array<{ unknown: string }>
 }
 
+interface GotJSONResponse {
+    responseType: 'json',
+
+    [index: string]: unknown
+}
+
 export default class ApiGithub {
 
     protected _token: string;
@@ -28,16 +33,20 @@ export default class ApiGithub {
         this._baseUrl = 'https://api.github.com';
     }
 
-    _getProxy ({ relativePath, method, headers = {}, body = '' }: ProxyInterface): CancelableRequest<Response<string>> {
-        const options: OptionsOfDefaultResponseBody = {
+    _getProxy ({
+        relativePath,
+        method,
+        headers = {},
+        body = ''
+    }: ProxyInterface): CancelableRequest<Response<HandleResponseInterface>> {
+        const options: GotJSONResponse = {
             method,
-            headers: { ...headers },
+            headers:      { ...headers },
+            responseType: 'json'
         };
-
 
         if (body)
             options.body = body;
-
 
         debugApiGithub(`URL: ${this._baseUrl}${relativePath}`);
         debugApiGithub(`Options before request: `);
@@ -46,17 +55,16 @@ export default class ApiGithub {
         return got(`${this._baseUrl}${relativePath}`, options);
     }
 
-    _handleResponse (response: Response): HandleResponseInterface {
+    _handleResponse (response: Response<HandleResponseInterface>): HandleResponseInterface {
 
         debugApiGithub(`Response: ${response}`);
 
-        const result = typeof response.body === 'string' ? JSON.parse(response.body) : response.body;
+        const result = response.body;
 
         debugApiGithub(`Status code: ${response.statusCode}`);
 
         if (response.statusCode === 200)
             return result;
-
 
         return {
             status:  response.statusMessage,
