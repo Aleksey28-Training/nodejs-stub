@@ -12,6 +12,7 @@ class RunsRouter {
 
     getRouter (): IMiddleware {
         this._router.get('/', this._runsController.renderRuns.bind(this._runsController));
+        this._router.post('/rerun', this._runsController.rerunRun.bind(this._runsController));
 
         return this._router.routes();
     }
