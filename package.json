@@ -2,7 +2,7 @@
   "name": "nodejs-katas",
   "version": "1.0.0",
   "description": "Basic Node.js exercises",
-  "main": "lib/index.js",
+  "main": "lib/src/server/index.js",
   "type": "commonjs",
   "files": [
     "lib",
@@ -11,7 +11,7 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "tsc --outDir ./lib",
-    "start": "node lib/index.js",
+    "start": "node lib/src/server/index.js",
     "lint": "eslint",
     "test": "npm run lint && mocha lib/test/**/*-test.js",
     "watch": "npm test -- -w"
