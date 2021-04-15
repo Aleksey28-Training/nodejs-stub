@@ -126,4 +126,31 @@ describe('Checking api GitHub', () => {
         expect(JSON.stringify(result)).to.be.equal(JSON.stringify(RUNS.body));
         expect(result.status).to.be.not.equal(404);
     });
+    it('Re-run should working', async () => {
+        const myGot = sinon.stub();
+        const id = '752231836';
+
+        myGot.withArgs(`https://api.github.com/repos/Aleksey28-Training/nodejs-stub/actions/runs/${id}/rerun`).returns({
+            'statusCode': 201,
+            'body':       {}
+        });
+
+        myGot.withArgs(`https://api.github.com/repos/Aleksey28-Training/nodejs-stub/actions/runs/${id}/run`).returns({
+            statusCode: 404,
+            message:    'Shit happens!\nTry again.'
+        });
+
+        const { default: ApiGithub } = proxyquire('../src/server/apiGithub', {
+            'got': myGot,
+        });
+
+        debugApiGithub(ApiGithub);
+
+        const apiGithubObject = new ApiGithub(token);
+
+        const result = await apiGithubObject.rerunRun(owner, repo, id);
+
+        expect(token).to.be.not.equal('');
+        expect(result.status).to.be.not.equal(404);
+    });
 });
