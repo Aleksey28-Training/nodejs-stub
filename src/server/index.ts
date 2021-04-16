@@ -1,5 +1,5 @@
-import { Config, debugApp, debugConfig } from './src/config.js';
-import Server from './src/server.js';
+import { Config, debugApp, debugConfig } from './config.js';
+import Server from './server.js';
 import { readFileSync } from 'fs';
 
 const config = new Config({ host: 'localhost', port: 1337 });

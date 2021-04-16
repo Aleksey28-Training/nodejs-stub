@@ -6,13 +6,13 @@ import defaultConfig, {
     owner,
     port,
     repo, token
-} from '../src/config.js';
-import server from '../index.js';
+} from '../src/server/config.js';
+import server from '../src/server/index.js';
 import { expect } from 'chai';
 import got from 'got';
 import sinon from 'sinon';
 import proxyquire from 'proxyquire';
-import { RUNS } from './constants-test';
+import { RUNS } from './constants-test.js';
 
 debugConfig(typeof config);
 debugConfig(config);
@@ -113,7 +113,7 @@ describe('Checking api GitHub', () => {
         });
 
 
-        const { default: ApiGithub } = proxyquire('../src/apiGithub', {
+        const { default: ApiGithub } = proxyquire('../src/server/apiGithub', {
             'got': myGot,
         });
 

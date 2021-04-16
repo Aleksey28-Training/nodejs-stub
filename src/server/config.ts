@@ -10,11 +10,13 @@ const DEBUG_PREFIX_APP = 'app';
 const DEBUG_PREFIX_CONFIG = 'config';
 const DEBUG_PREFIX_GLOBAL = 'global';
 const DEBUG_PREFIX_GITHUB_API = 'github_api';
+const DEBUG_PREFIX_RUNS = 'runs';
 
 export const debugApp = debug(DEBUG_PREFIX_APP);
 export const debugConfig = debug(DEBUG_PREFIX_CONFIG);
 export const debugGlobal = debug(DEBUG_PREFIX_GLOBAL);
 export const debugApiGithub = debug(DEBUG_PREFIX_GITHUB_API);
+export const debugRuns = debug(DEBUG_PREFIX_RUNS);
 
 interface ValuesInterface {
     port: number,
@@ -49,7 +51,7 @@ export class Config {
             host:  process.env['HOST'] || '',
             owner: process.env['OWNER'] || '',
             repo:  process.env['REPO'] || '',
-            token: process.env['GITHUB_TOKEN']
+            token: `Bearer ${process.env['GITHUB_TOKEN']}`
         };
     }
 

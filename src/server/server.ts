@@ -6,6 +6,7 @@ import { Config, debugApp, debugConfig } from './config.js';
 import { readFileSync } from 'fs';
 import Pug from 'koa-pug';
 import RunsRouter from './routes/runs.js';
+import bodyparser from 'koa-bodyparser';
 
 class Server {
 
@@ -43,6 +44,11 @@ class Server {
     async start (): Promise<unknown> {
         const listenPromise = once(this._server, 'listening');
 
+        this._app.use(bodyparser({
+            detectJSON: function (ctx) {
+                return /\.json$/i.test(ctx.path);
+            }
+        }));
         this._app.use(this._runsRouter.getRouter());
         this._server.listen(this._port);
 

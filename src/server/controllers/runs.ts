@@ -1,4 +1,4 @@
-import { Config, debugApp } from '../config.js';
+import { Config, debugApp, debugRuns } from '../config.js';
 import ApiGithub from '../apiGithub.js';
 import RunsModel from '../models/runs.js';
 import { RenderOptions } from 'koa-pug/dist';
@@ -43,6 +43,23 @@ class RunsController {
 
         await ctx.render('index', locals, true);
     }
+
+    async rerunRun (ctx: any, next: any): Promise<void> {
+        debugRuns('Rerunning');
+        const body = ctx.request.body;
+
+        debugRuns(body);
+        if (!('id' in body)) {
+            ctx.status = 400;
+            ctx.body = {
+                message: 'Id is empty!'
+            };
+            next();
+        }
+
+        ctx.body = await this._apiGithubObj.rerunRun(this._owner, this._repo, body.id);
+    }
+
 }
 
 export default RunsController;
