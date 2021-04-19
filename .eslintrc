@@ -13,7 +13,10 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended"
   ],
-  "ignorePatterns": ["**/lib/"],
+  "ignorePatterns": [
+    "**/lib/",
+    "**/client/"
+  ],
   "rules": {
     "arrow-parens": [
       2,
@@ -26,7 +29,7 @@
         "after": true
       }
     ],
-    "no-console":  "error",
+    "no-console": "error",
     "prefer-arrow-callback": 2,
     "no-alert": 2,
     "no-array-constructor": 2,
@@ -187,9 +190,19 @@
     ],
     "no-duplicate-imports": 2,
     "@typescript-eslint/no-extra-parens": 2,
-    "@typescript-eslint/no-use-before-define": [2, "nofunc"],
-    "@typescript-eslint/no-var-requires": [0],
-    "@typescript-eslint/explicit-function-return-type": [2, { "allowExpressions": true }],
+    "@typescript-eslint/no-use-before-define": [
+      2,
+      "nofunc"
+    ],
+    "@typescript-eslint/no-var-requires": [
+      0
+    ],
+    "@typescript-eslint/explicit-function-return-type": [
+      2,
+      {
+        "allowExpressions": true
+      }
+    ],
     "@typescript-eslint/no-unused-vars": 2,
     "no-extra-parens": 2,
     "no-use-before-define": [

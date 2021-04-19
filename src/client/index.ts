@@ -1,5 +1,3 @@
-import { debugRuns } from '../server/config';
-
 async function rerun (id: number): Promise<void> {
     const options = {
         method:  'POST',
@@ -13,8 +11,6 @@ async function rerun (id: number): Promise<void> {
         await fetch('http://localhost:1337/rerun', options);
     }
     catch (error) {
-        debugRuns(error);
+        console.log(error);
     }
 }
-
-export default rerun;
