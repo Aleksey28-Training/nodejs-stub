@@ -1,0 +1,13 @@
+@import url(./vendor/normalize.css);
+@import url(./fonts/Inter/Web/inter.css);
+@import url(./bloks/page/page.css);
+@import url(./bloks/header/header.css);
+@import url(./bloks/header/__title/header__title.css);
+@import url(./bloks/runs/runs.css);
+@import url(./bloks/runs/__title/runs__title.css);
+@import url(./bloks/table/table.css);
+@import url(./bloks/table/__column/table__column.css);
+@import url(./bloks/table/__column/_type/table__column_type_head.css);
+@import url(./bloks/table/__column/_type/table__column_type_body.css);
+@import url(./bloks/table/__column/_button/table__column_button.css);
+@import url(./bloks/table/__button/table__button.css);
