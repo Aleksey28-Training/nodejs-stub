@@ -1,6 +1,6 @@
 import { config as envConfig } from 'dotenv';
 import debug from 'debug';
-import * as GLOBALS from './globals.js';
+import * as GLOBALS from './globals';
 
 const DEFAULTS = { ...GLOBALS };
 
@@ -24,12 +24,14 @@ interface ValuesInterface {
     owner: string,
     repo: string,
     token?: string,
+    baseUrlGitHub?: string,
     update?: (values: ValuesInterface) => ({
         port: number,
         host: string,
         owner: string,
         repo: string,
         token?: string,
+        baseUrlGitHub?: string,
     })
 }
 
@@ -71,6 +73,7 @@ export class Config {
         debugConfig(`OWNER: ${this.values.owner}`);
         debugConfig(`REPO: ${this.values.repo}`);
         debugConfig(`TOKEN: ${this.values.token}`);
+        debugConfig(`BASE URL GITHUB: ${this.values.baseUrlGitHub}`);
         if (Config.globals.update)
             Config.globals.update(this.values);
 
@@ -80,5 +83,5 @@ export class Config {
 
 export default Config.globals;
 
-export * from './globals.js';
+export * from './globals';
 

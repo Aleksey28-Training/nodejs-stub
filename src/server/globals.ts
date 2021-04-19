@@ -1,5 +1,6 @@
-import { debugGlobal } from './config.js';
+import { debugGlobal } from './config';
 
+export let baseUrlGitHub = 'https://api.github.com';
 export let host = 'localhost';
 export let port = 1337;
 export let owner = '';
@@ -12,6 +13,7 @@ interface UpdateInterface {
     owner: string,
     repo: string,
     token?: string,
+    baseUrlGitHub?: string,
     [Symbol.toStringTag]?: string,
 }
 
@@ -26,12 +28,14 @@ export function update (this: UpdateInterface, newValues: UpdateInterface): Upda
     owner = newValues.owner ? newValues.owner : owner;
     repo = newValues.repo ? newValues.repo : repo;
     token = newValues.token ? newValues.token : token;
+    baseUrlGitHub = newValues.baseUrlGitHub ? newValues.baseUrlGitHub : baseUrlGitHub;
 
     debugGlobal(`HOST: ${host}`);
     debugGlobal(`PORT: ${port}`);
     debugGlobal(`OWNER: ${owner}`);
     debugGlobal(`REPO: ${repo}`);
     debugGlobal(`TOKEN: ${token}`);
+    debugGlobal(`BASE URL GITHUB: ${baseUrlGitHub}`);
 
     return this;
 }
