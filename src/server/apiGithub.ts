@@ -14,7 +14,8 @@ interface ProxyInterface {
 interface HandleResponseInterface {
     status?: string,
     message?: string,
-    'workflow_runs'?: Array<{ unknown: string }>
+    'workflow_runs'?: Array<{ unknown: string }>,
+    [key: string]: unknown
 }
 
 interface GotJSONResponse {
@@ -137,6 +138,32 @@ export default class ApiGithub {
         const params: ProxyInterface = {
             relativePath: `/repos/${owner}/${repo}/actions/runs/${id}/rerun`,
             method:       'POST',
+            headers:      {
+                'Content-Type':  'application/json',
+                'authorization': this._token
+            },
+        };
+
+        let response;
+
+        try {
+            response = await this._getProxy(params);
+        }
+        catch (error) {
+            response = error.response;
+        }
+
+        return this._handleResponse(response);
+    }
+
+    async checkRun (owner: string, repo: string, id: string): Promise<HandleResponseInterface> {
+
+        //NOTE: You need to tap $env:DEBUG="github api" in terminal to turn on debug
+        debugApiGithub(`Id: ${id}`);
+
+        const params: ProxyInterface = {
+            relativePath: `/repos/${owner}/${repo}/actions/runs/${id}`,
+            method:       'GET',
             headers:      {
                 'Content-Type':  'application/json',
                 'authorization': this._token
