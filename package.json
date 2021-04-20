@@ -18,7 +18,7 @@
     "lint": "eslint src test",
     "test": "npm run lint && mocha lib/test/**/*-test.js",
     "watch": "npm test -- -w",
-    "tctest": "testcafe chrome test/functional-test.ts"
+    "tctest": "testcafe chrome ftest/functional-test.ts"
   },
   "repository": {
     "type": "git",
