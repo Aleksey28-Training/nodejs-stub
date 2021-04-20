@@ -69,10 +69,19 @@ class Api {
 
     async rerun({ id }:{id:string}) {
         const params: ProxyInterface = {
-            relativePath: "/rerun",
+            relativePath: `/rerun/${id}`,
             method: "POST",
-            headers: {},
-            body: JSON.stringify({ id }),
+            headers: {}
+        };
+        const response = await this._getProxy(params);
+        return await this._handleResponse(response);
+    }
+
+    async checkRun({ id }:{id:string}) {
+        const params: ProxyInterface = {
+            relativePath: `/rerun/${id}`,
+            method: "GET",
+            headers: {}
         };
         const response = await this._getProxy(params);
         return await this._handleResponse(response);
