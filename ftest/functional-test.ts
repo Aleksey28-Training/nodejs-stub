@@ -3,7 +3,10 @@ import nock = require('nock');
 import { Config } from '../src/server/config';
 
 fixture`Getting Started`
-    .page`http://localhost:1337/`;
+    .page`http://localhost:1337/`
+    .before(async () => {
+        await server.start();
+    });
 
 test('Rerun', async t => {
 
