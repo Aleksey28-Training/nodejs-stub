@@ -2,7 +2,7 @@ import { debugGlobal } from './config';
 
 export let baseUrlGitHub = 'https://api.github.com';
 export let host          = 'localhost';
-export let port.         = 1337;
+export let port          = 1337;
 export let owner         = '';
 export let repo          = '';
 export let token         = '';
