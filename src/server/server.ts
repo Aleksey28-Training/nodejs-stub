@@ -11,7 +11,6 @@ import KoaStatic from 'koa-static';
 
 
 class Server {
-
     _port: number;
     _app: Koa;
     _server: http.Server;

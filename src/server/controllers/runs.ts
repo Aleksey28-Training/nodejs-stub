@@ -62,7 +62,6 @@ class RunsController {
     }
 
     async checkRun (ctx: any, next: any): Promise<void> {
-
         const params = ctx.request.params;
 
         debugRuns('Checking');
