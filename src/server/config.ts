@@ -71,6 +71,7 @@ export class Config {
         debugConfig(`REPO: ${this.values.repo}`);
         debugConfig(`TOKEN: ${this.values.token}`);
 
+
         if (Config.globals.update)
             Config.globals.update(this.values);
     }
