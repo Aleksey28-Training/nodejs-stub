@@ -58,10 +58,7 @@ async function rerun (evt: Event): Promise<void> {
                 clearInterval(interval);
             }
         }, intervalSeconds * 1000);
-
     } catch (error) {
         console.log(error);
     }
 }
-
-

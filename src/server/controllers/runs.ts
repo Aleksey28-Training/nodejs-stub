@@ -45,7 +45,6 @@ class RunsController {
     }
 
     async rerunRun (ctx: any, next: any): Promise<void> {
-
         const params = ctx.request.params;
 
         debugRuns('Rerunning');
@@ -63,7 +62,6 @@ class RunsController {
     }
 
     async checkRun (ctx: any, next: any): Promise<void> {
-
         const params = ctx.request.params;
 
         debugRuns('Checking');

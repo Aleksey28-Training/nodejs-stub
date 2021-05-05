@@ -20,6 +20,7 @@ test('Rerun', async t => {
 
     nock(baseUrlGitHub)
         .post(new RegExp(`/repos/${owner}/${repo}/actions/runs/\\d*/rerun`))
+
         .reply(201, {});
 
     await t

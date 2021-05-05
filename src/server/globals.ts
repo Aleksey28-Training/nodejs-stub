@@ -1,5 +1,6 @@
 import { debugGlobal } from './config';
 
+
 export let baseUrlGitHub = 'https://api.github.com';
 export let host = 'localhost';
 export let port = 1337;
@@ -19,9 +20,9 @@ interface UpdateInterface {
 
 export function update (this: UpdateInterface, newValues: UpdateInterface): UpdateInterface {
     debugGlobal(typeof this);
+
     if (this && !(this[Symbol.toStringTag] === 'Module'))
         return Object.assign(this, newValues);
-
 
     host = newValues.host ? newValues.host : host;
     port = newValues.port ? newValues.port : port;
