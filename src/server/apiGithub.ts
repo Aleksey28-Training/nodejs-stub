@@ -1,5 +1,6 @@
 import got, { CancelableRequest, Method, Response } from 'got';
-import { debugApiGithub } from './config.js';
+import { debugApiGithub, baseUrlGitHub } from './config.js';
+
 
 interface ProxyInterface {
     relativePath: string,
@@ -30,7 +31,7 @@ export default class ApiGithub {
 
     constructor (token: string | undefined) {
         this._token = token || '';
-        this._baseUrl = 'https://api.github.com';
+        this._baseUrl = baseUrlGitHub;
     }
 
     _getProxy ({

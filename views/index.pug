@@ -1,22 +1,8 @@
+doctype html
 html
     head
-        style
-            include ./vendor/normalize.css
-            include ./fonts/Inter/Web/inter.css
-            include ./bloks/page/page.css
-            include ./bloks/header/header.css
-            include ./bloks/header/__title/header__title.css
-            include ./bloks/runs/runs.css
-            include ./bloks/runs/__title/runs__title.css
-            include ./bloks/table/table.css
-            include ./bloks/table/__column/table__column.css
-            include ./bloks/table/__column/_type/table__column_type_head.css
-            include ./bloks/table/__column/_type/table__column_type_body.css
-            include ./bloks/table/__column/_button/table__column_button.css
-            include ./bloks/table/__button/table__button.css
         title=name
-        script
-            include ../lib/src/client/index.js
+        link(rel='stylesheet' href='./index.css')
     body.page
         div.header
             h1.header__title GitHub data
@@ -34,9 +20,12 @@ html
                             each val in values
                                 tr
                                     each column in columns
-                                        td.table__column.table__column_type_body=val[column]
+                                        td(class=`table__column table__column_type_body table__column_name_${column}`)=val[column]
                                     td.table__column.table__column_type_body.table__column_button
                                         if val['conclusion'] !== 'success'
-                                            button.table__button(onclick=`rerun(${val['id']})`)="Rerun"
+                                            button.table__button="Rerun"
                 else
                     p There are no values
+        script(type="module" src='./index.js')
+        script(type="module" src='./utils/constants.js')
+        script(type="module" src='./utils/api.js')

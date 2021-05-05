@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "es2020",
+    "outDir": "./lib/src/client"
+  },
+  "include": [
+    "src/client/**/*"
+  ]
+}

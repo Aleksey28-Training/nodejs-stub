@@ -7,6 +7,8 @@ import { readFileSync } from 'fs';
 import Pug from 'koa-pug';
 import RunsRouter from './routes/runs.js';
 import bodyparser from 'koa-bodyparser';
+import KoaStatic from 'koa-static';
+
 
 class Server {
 
@@ -49,6 +51,10 @@ class Server {
                 return /\.json$/i.test(ctx.path);
             }
         }));
+
+        this._app.use(KoaStatic(path.join(path.resolve(), 'views')));
+        this._app.use(KoaStatic(path.join(path.resolve(), 'lib/src/client/')));
+
         this._app.use(this._runsRouter.getRouter());
         this._server.listen(this._port);
 

@@ -1,20 +1,27 @@
-import { debugRuns } from '../server/config';
+import api from './utils/api.js';
 
-async function rerun (id: number): Promise<void> {
-    const options = {
-        method:  'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id })
-    };
+const allButtonsRerun = document.querySelectorAll('.table__button');
+
+allButtonsRerun.forEach(item => {
+    item.addEventListener('click', rerun);
+});
+
+async function rerun (evt: Event): Promise<void> {
+
+    if (!evt.target) return;
+
+    const row = (<HTMLButtonElement>evt.target).closest('tr');
+    const id = row?.querySelector('.table__column_name_id');
+    const status = row?.querySelector('.table__column_name_status');
+
+    if (!id || !status) return;
 
     try {
-        await fetch('http://localhost:1337/rerun', options);
-    }
-    catch (error) {
-        debugRuns(error);
+        await api.rerun({ id: id?.innerHTML });
+        if (status) {
+            status.innerHTML = 'queued';
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
-
-export default rerun;
