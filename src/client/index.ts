@@ -25,5 +25,3 @@ async function rerun (evt: Event): Promise<void> {
         console.log(error);
     }
 }
-
-

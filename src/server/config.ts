@@ -25,6 +25,7 @@ interface ValuesInterface {
     repo: string,
     token?: string,
     baseUrlGitHub?: string,
+
     update?: (values: ValuesInterface) => ({
         port: number,
         host: string,
@@ -59,13 +60,12 @@ export class Config {
 
     constructor ({ host, port }: { host: string, port: number }) {
         this.values = { ...Config.defaults };
+
         if (this.values.update)
             this.values.update(Object.assign(Config._getFromEnv(), { host, port }));
 
-
         if (!this.values.owner || !this.values.repo)
             throw new Error('Owner or repo are empty!');
-
 
         //You need to tap $env:DEBUG="config" in terminal to turn on debug
         debugConfig(`PORT: ${this.values.port}`);
@@ -74,14 +74,12 @@ export class Config {
         debugConfig(`REPO: ${this.values.repo}`);
         debugConfig(`TOKEN: ${this.values.token}`);
         debugConfig(`BASE URL GITHUB: ${this.values.baseUrlGitHub}`);
+
         if (Config.globals.update)
             Config.globals.update(this.values);
-
-
     }
 }
 
 export default Config.globals;
 
 export * from './globals';
-

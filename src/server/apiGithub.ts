@@ -1,6 +1,7 @@
 import got, { CancelableRequest, Method, Response } from 'got';
 import { debugApiGithub, baseUrlGitHub } from './config.js';
 
+
 interface ProxyInterface {
     relativePath: string,
     method: Method | undefined,
