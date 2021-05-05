@@ -49,6 +49,7 @@ class RunsController {
         const body = ctx.request.body;
 
         debugRuns(body);
+
         if (!('id' in body)) {
             ctx.status = 400;
             ctx.body = {

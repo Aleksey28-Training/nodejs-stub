@@ -12,7 +12,11 @@ html
             include ./bloks/table/__column/table__column.css
             include ./bloks/table/__column/_type/table__column_type_head.css
             include ./bloks/table/__column/_type/table__column_type_body.css
+            include ./bloks/table/__column/_button/table__column_button.css
+            include ./bloks/table/__button/table__button.css
         title=name
+        script
+            include ../lib/src/client/index.js
     body.page
         div.header
             h1.header__title GitHub data
@@ -25,10 +29,14 @@ html
                             tr
                                 each column in columns
                                     th.table__column.table__column_type_head=column
+                                th.table__column.table__column_type_head="actions"
                         tbody
                             each val in values
                                 tr
                                     each column in columns
                                         td.table__column.table__column_type_body=val[column]
+                                    td.table__column.table__column_type_body.table__column_button
+                                        if val['conclusion'] !== 'success'
+                                            button.table__button(onclick=`rerun(${val['id']})`)="Rerun"
                 else
                     p There are no values
