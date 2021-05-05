@@ -45,12 +45,12 @@ class RunsController {
     }
 
     async rerunRun (ctx: any, next: any): Promise<void> {
+        const params = ctx.request.params;
+
         debugRuns('Rerunning');
-        const body = ctx.request.body;
+        debugRuns(params);
 
-        debugRuns(body);
-
-        if (!('id' in body)) {
+        if (!('id' in params)) {
             ctx.status = 400;
             ctx.body = {
                 message: 'Id is empty!'
@@ -58,7 +58,25 @@ class RunsController {
             next();
         }
 
-        ctx.body = await this._apiGithubObj.rerunRun(this._owner, this._repo, body.id);
+        ctx.body = await this._apiGithubObj.rerunRun(this._owner, this._repo, params.id);
+    }
+
+    async checkRun (ctx: any, next: any): Promise<void> {
+
+        const params = ctx.request.params;
+
+        debugRuns('Checking');
+        debugRuns(params);
+
+        if (!('id' in params)) {
+            ctx.status = 400;
+            ctx.body = {
+                message: 'Id is empty!'
+            };
+            next();
+        }
+
+        ctx.body = await this._apiGithubObj.checkRun(this._owner, this._repo, params.id);
     }
 
 }
