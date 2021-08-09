@@ -1,23 +1,15 @@
-import { Config, debugApp, debugConfig } from './config.js';
+import { Config, debugApp } from './config';
 import Server from './server.js';
-import { readFileSync } from 'fs';
-
-const config = new Config({ host: 'localhost', port: 1337 });
-const server = Server.create();
-
-//NOTE: You need to tap $env:DEBUG="config" in terminal to turn on debug
-debugConfig(config);
 
 async function runServer (): Promise<void> {
-    const packageJSON = JSON.parse(readFileSync('./package.json', 'utf8'));
+    await Server.create();
 
-    await server.start();
-    //NOTE: You need to tap $env:DEBUG="app" in terminal to turn on debug
-    debugApp(`App "${packageJSON.name}" is listening on port: ${Config.globals.port}`);
+    //NOTE: You need to tap $env:DEBUG="node-stub:app" in terminal to turn on debug
+    debugApp(`App is listening on port`);
 }
 
 if (require.main === module)
     runServer();
 
 
-export default server;
+export { Server, Config, Server as default };

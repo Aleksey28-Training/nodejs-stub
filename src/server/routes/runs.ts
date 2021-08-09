@@ -1,5 +1,5 @@
 import Router, { IMiddleware } from 'koa-router';
-import RunsController from '../controllers/runs.js';
+import RunsController from '../controllers/runs';
 
 class RunsRouter {
     _router: Router;

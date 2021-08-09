@@ -2,44 +2,50 @@ import * as http from 'http';
 import Koa from 'koa';
 import * as path from 'path';
 import { once } from 'events';
-import { Config, debugApp, debugConfig } from './config.js';
-import { readFileSync } from 'fs';
+import { Config, debugApp, debugConfig } from './config';
 import Pug from 'koa-pug';
-import RunsRouter from './routes/runs.js';
+import RunsRouter from './routes/runs';
 import bodyparser from 'koa-bodyparser';
 import KoaStatic from 'koa-static';
 
 
 class Server {
+    _config: Config;
     _port: number;
     _app: Koa;
     _server: http.Server;
     _pug: Pug;
     _runsRouter: RunsRouter;
 
-    constructor (port: number) {
-        this._port = port;
+    constructor (config?: Config) {
+        this._config = config || new Config();
+
+        // NOTE: You need to tap $env:DEBUG="node-stub:config" in terminal to turn on debug
+        debugConfig(this._config);
+
+        this._port = this._config.values.port;
         this._app = new Koa();
+
         this._pug = new Pug({
             viewPath: path.join(path.resolve(), 'views'),
             basedir:  path.resolve(),
             app:      this._app
         });
+
         this._runsRouter = new RunsRouter();
+
+        // NOTE: You need to tap $env:DEBUG="node-stub:app" in terminal to turn on debug
+        debugApp(`booting`);
+
         this._server = http.createServer(this._app.callback());
     }
 
-    static create (): Server {
-        //NOTE: You need to tap $env:DEBUG="config" in terminal to turn on debug
-        debugConfig(Config);
+    static async create (config?: Config): Promise<Server> {
+        const server = new Server(config);
 
-        const { port } = Config.globals;
-        const packageJSON = JSON.parse(readFileSync('./package.json', 'utf8'));
+        await server.start();
 
-        //NOTE: You need to tap $env:DEBUG="app" in terminal to turn on debug
-        debugApp(`${packageJSON.name} booting`);
-
-        return new Server(port);
+        return server;
     }
 
     async start (): Promise<unknown> {

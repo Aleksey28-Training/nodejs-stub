@@ -1,7 +1,8 @@
-import { Config, debugApp, debugRuns } from '../config.js';
-import ApiGithub from '../apiGithub.js';
-import RunsModel from '../models/runs.js';
+import { Config, debugApp, debugRuns } from '../config';
+import ApiGithub from '../apiGithub';
+import RunsModel from '../models/runs';
 import { RenderOptions } from 'koa-pug/dist';
+import { DefaultContext, Next } from 'koa';
 
 class RunsController {
     _apiGithubObj: ApiGithub;
@@ -44,7 +45,7 @@ class RunsController {
         await ctx.render('index', locals, true);
     }
 
-    async rerunRun (ctx: any, next: any): Promise<void> {
+    async rerunRun (ctx: DefaultContext, next: Next): Promise<void> {
         const params = ctx.request.params;
 
         debugRuns('Rerunning');
@@ -61,7 +62,7 @@ class RunsController {
         ctx.body = await this._apiGithubObj.rerunRun(this._owner, this._repo, params.id);
     }
 
-    async checkRun (ctx: any, next: any): Promise<void> {
+    async checkRun (ctx: DefaultContext, next: Next): Promise<void> {
         const params = ctx.request.params;
 
         debugRuns('Checking');

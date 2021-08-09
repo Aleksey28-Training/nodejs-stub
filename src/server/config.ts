@@ -1,47 +1,16 @@
 import { config as envConfig } from 'dotenv';
-import debug from 'debug';
 import * as GLOBALS from './globals';
 
 const DEFAULTS = { ...GLOBALS };
 
 envConfig();
 
-const DEBUG_PREFIX_APP = 'app';
-const DEBUG_PREFIX_CONFIG = 'config';
-const DEBUG_PREFIX_GLOBAL = 'global';
-const DEBUG_PREFIX_GITHUB_API = 'github_api';
-const DEBUG_PREFIX_RUNS = 'runs';
-const DEBUG_PREFIX_FUNCTIONAL_TEST = 'ftest';
-
-
-export const debugApp = debug(DEBUG_PREFIX_APP);
-export const debugConfig = debug(DEBUG_PREFIX_CONFIG);
-export const debugGlobal = debug(DEBUG_PREFIX_GLOBAL);
-export const debugApiGithub = debug(DEBUG_PREFIX_GITHUB_API);
-export const debugRuns = debug(DEBUG_PREFIX_RUNS);
-export const debugFunctionalTest = debug(DEBUG_PREFIX_FUNCTIONAL_TEST);
-
-interface ValuesInterface {
-    port: number,
-    host: string,
-    owner: string,
-    repo: string,
-    token?: string,
-    baseUrlGitHub?: string,
-
-    update?: (values: ValuesInterface) => ({
-        port: number,
-        host: string,
-        owner: string,
-        repo: string,
-        token?: string,
-        baseUrlGitHub?: string,
-    })
-}
+type ValueStorageInterface = typeof GLOBALS;
+export type ValuesInterface = Omit<ValueStorageInterface, 'update'>;
+export type OptionalValuesInterface = Partial<ValuesInterface>;
 
 export class Config {
-
-    values: ValuesInterface;
+    values: ValueStorageInterface;
 
     static get defaults (): ValuesInterface {
         return DEFAULTS;
@@ -51,35 +20,42 @@ export class Config {
         return GLOBALS;
     }
 
-    static _getFromEnv (): ValuesInterface {
-        return {
-            port:  Number(process.env['PORT']),
-            host:  process.env['HOST'] || '',
-            owner: process.env['OWNER'] || '',
-            repo:  process.env['REPO'] || '',
-            token: `Bearer ${process.env['GITHUB_TOKEN']}`
-        };
+    static _getFromEnv (): OptionalValuesInterface {
+        const settingsFromEnv: { [key: string]: string } = {};
+        const propertiesFromEnv = [
+            { envKey: 'PORT', key: 'port' },
+            { envKey: 'HOST', key: 'host' },
+            { envKey: 'OWNER', key: 'owner' },
+            { envKey: 'REPO', key: 'repo' },
+            { envKey: 'GITHUB_TOKEN', key: 'token' },
+        ];
+
+        propertiesFromEnv.forEach(item => {
+            if (process.env[item.envKey])
+                settingsFromEnv[item.key.toLowerCase()] = String(process.env[item.envKey]);
+        });
+
+        return settingsFromEnv;
     }
 
-    constructor ({ host, port }: { host: string, port: number }) {
-        this.values = { ...Config.defaults };
+    constructor (values?: OptionalValuesInterface) {
+        this.values = { ...DEFAULTS };
 
         if (this.values.update)
-            this.values.update(Object.assign(Config._getFromEnv(), { host, port }));
+            this.values.update(Object.assign(this.values, Config._getFromEnv(), values));
 
         if (!this.values.owner || !this.values.repo)
             throw new Error('Owner or repo are empty!');
 
         //You need to tap $env:DEBUG="config" in terminal to turn on debug
-        debugConfig(`PORT: ${this.values.port}`);
-        debugConfig(`HOST: ${this.values.host}`);
-        debugConfig(`OWNER: ${this.values.owner}`);
-        debugConfig(`REPO: ${this.values.repo}`);
-        debugConfig(`TOKEN: ${this.values.token}`);
-        debugConfig(`BASE URL GITHUB: ${this.values.baseUrlGitHub}`);
+        GLOBALS.debugConfig(`PORT: ${this.values.port}`);
+        GLOBALS.debugConfig(`HOST: ${this.values.host}`);
+        GLOBALS.debugConfig(`OWNER: ${this.values.owner}`);
+        GLOBALS.debugConfig(`REPO: ${this.values.repo}`);
+        GLOBALS.debugConfig(`TOKEN: ${this.values.token}`);
+        GLOBALS.debugConfig(`BASE URL GITHUB: ${this.values.baseUrlGitHub}`);
 
-        if (Config.globals.update)
-            Config.globals.update(this.values);
+        GLOBALS.update(this.values);
     }
 }
 
