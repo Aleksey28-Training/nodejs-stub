@@ -21,13 +21,21 @@ export class Config {
     }
 
     static _getFromEnv (): OptionalValuesInterface {
-        return {
-            port:  process.env['PORT'] ? Number(process.env['PORT']) : void 0,
-            host:  process.env['HOST'],
-            owner: process.env['OWNER'],
-            repo:  process.env['REPO'],
-            token: process.env['GITHUB_TOKEN'] && `Bearer ${process.env['GITHUB_TOKEN']}`
-        };
+        const settingsFromEnv: { [key: string]: string } = {};
+        const propertiesFromEnv = [
+            { envKey: 'PORT', key: 'port' },
+            { envKey: 'HOST', key: 'host' },
+            { envKey: 'OWNER', key: 'owner' },
+            { envKey: 'REPO', key: 'repo' },
+            { envKey: 'GITHUB_TOKEN', key: 'token' },
+        ];
+
+        propertiesFromEnv.forEach(item => {
+            if (process.env[item.envKey])
+                settingsFromEnv[item.key.toLowerCase()] = String(process.env[item.envKey]);
+        });
+
+        return settingsFromEnv;
     }
 
     constructor (values?: OptionalValuesInterface) {

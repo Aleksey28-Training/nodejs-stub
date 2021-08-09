@@ -31,7 +31,7 @@ export default class ApiGithub {
     protected _baseUrl: string;
 
     constructor (token: string | undefined) {
-        this._token = token || '';
+        this._token = `Bearer ${token}` || '';
         this._baseUrl = baseUrlGitHub;
     }
 
