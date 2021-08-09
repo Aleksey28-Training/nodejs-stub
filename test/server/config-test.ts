@@ -5,7 +5,8 @@ import defaultConfig, {
     host,
     owner,
     port,
-    repo, token
+    repo,
+    token
 } from '../../src/server/config.js';
 import Server from '../../src/server/index';
 import { expect } from 'chai';
@@ -89,7 +90,7 @@ describe('Checking server', () => {
     });
 });
 
-describe('Checking api GitHub', () => {
+describe('Checking api GitHub', async () => {
     it('Getting runs should working', async () => {
         const myGot = sinon.stub();
 
@@ -138,7 +139,6 @@ describe('Checking api GitHub', () => {
 
         const result = await apiGithubObject.rerunRun(owner, repo, id);
 
-        expect(token).to.be.not.equal('');
         expect(result.status).to.be.not.equal(404);
     });
 });
