@@ -12,13 +12,14 @@
     "prepare": "npm run build",
     "build:client": "tsc -p ./tsconfig.client.json",
     "build:server": "tsc -p ./tsconfig.server.json",
+    "build:test": "tsc -p ./tsconfig.test.json",
     "build:all": "tsc -p .",
-    "build": "npm run build:all && npm run build:client && npm run build:server",
+    "build": "npm run build:client && npm run build:server && npm run build:test",
     "start": "node lib/src/server/index.js",
     "lint": "eslint src test",
     "test": "npm run lint && mocha lib/test/**/*-test.js",
     "watch": "npm test -- -w",
-    "tctest": "testcafe chrome lib/ftest/functional-test.js"
+    "tctest": "testcafe chrome test/functional/functional-test.ts"
   },
   "repository": {
     "type": "git",
