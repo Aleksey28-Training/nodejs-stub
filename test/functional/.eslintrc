@@ -2,8 +2,5 @@
   "globals": {
     "fixture": true,
     "test": true
-  },
-  "rules": {
-    "no-unused-expressions": "off"
   }
 }

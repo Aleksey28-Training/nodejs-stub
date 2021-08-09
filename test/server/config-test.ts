@@ -6,8 +6,8 @@ import defaultConfig, {
     owner,
     port,
     repo, token
-} from '../src/server/config.js';
-import server from '../src/server/index.js';
+} from '../../src/server/config.js';
+import Server from '../../src/server/index';
 import { expect } from 'chai';
 import got from 'got';
 import sinon from 'sinon';
@@ -26,18 +26,6 @@ describe('Checking "HOST"', () => {
 describe('Checking "PORT"', () => {
     it('"PORT" equals "1337"', () => {
         expect(port, 'PORT doesn\'t equal 1337').to.equal(1337);
-    });
-});
-
-describe('Checking "OWNER"', () => {
-    it('"OWNER" doesn\'t equal ""', () => {
-        expect(owner, 'OWNER equals ""').not.to.equal('');
-    });
-});
-
-describe('Checking "REPO"', () => {
-    it('"REPO" doesn\'t equal ""', () => {
-        expect(repo, 'REPO equals ""').not.to.equal('');
     });
 });
 
@@ -92,7 +80,7 @@ describe('Checking "defaultConfig"', () => {
 
 describe('Checking server', () => {
     it('Server sends status 200', async () => {
-        await server.start();
+        const server = await Server.create();
         const response = await got(`http://${config.host}:${config.port}/`);
 
         await server.stop();
@@ -113,7 +101,7 @@ describe('Checking api GitHub', () => {
         });
 
 
-        const { default: ApiGithub } = proxyquire('../src/server/apiGithub', {
+        const { default: ApiGithub } = proxyquire('../../src/server/apiGithub', {
             'got': myGot,
         });
 
@@ -128,7 +116,7 @@ describe('Checking api GitHub', () => {
     });
     it('Re-run should working', async () => {
         const myGot = sinon.stub();
-        const id = '752231836';
+        const id = '764122495';
 
         myGot.withArgs(`https://api.github.com/repos/Aleksey28-Training/nodejs-stub/actions/runs/${id}/rerun`).returns({
             'statusCode': 201,
@@ -140,7 +128,7 @@ describe('Checking api GitHub', () => {
             message:    'Shit happens!\nTry again.'
         });
 
-        const { default: ApiGithub } = proxyquire('../src/server/apiGithub', {
+        const { default: ApiGithub } = proxyquire('../../src/server/apiGithub', {
             'got': myGot,
         });
 

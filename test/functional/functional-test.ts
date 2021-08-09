@@ -1,12 +1,14 @@
 import { Selector } from 'testcafe';
 import nock = require('nock');
-import { Config, debugFunctionalTest } from '../src/server/config';
-import server from '../src/server';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { Server, Config } from '../../';
+
 
 fixture`Getting Started`
     .page`http://localhost:1337/`
     .before(async () => {
-        await server.start();
+        await Server.create();
     });
 
 test('Rerun', async t => {
@@ -15,8 +17,8 @@ test('Rerun', async t => {
 
     const { owner, repo, baseUrlGitHub = '' } = config.values;
 
-    debugFunctionalTest(`URL: ${baseUrlGitHub}`);
-    debugFunctionalTest(`request: ${new RegExp(`/repos/${owner}/${repo}/actions/runs/\\d*/rerun`)}`);
+    Config.globals.debugFunctionalTest(`URL: ${baseUrlGitHub}`);
+    Config.globals.debugFunctionalTest(`request: ${new RegExp(`/repos/${owner}/${repo}/actions/runs/\\d*/rerun`)}`);
 
     nock(baseUrlGitHub)
         .post(new RegExp(`/repos/${owner}/${repo}/actions/runs/\\d*/rerun`))
